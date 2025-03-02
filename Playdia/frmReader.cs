@@ -18,6 +18,7 @@ using System.Windows.Forms;
 using System.IO;
 using ISO9660;
 using PlaydiaControls;
+using System.Reflection;
 
 namespace Playdia
 {
@@ -137,6 +138,11 @@ namespace Playdia
                     discimg.ExtractVideo(dr, folderBrowserDialog1.SelectedPath);
                 }
             }
+        }
+
+        private void frmReader_Load(object sender, EventArgs e)
+        {
+            Text += Assembly.GetExecutingAssembly().GetName().Version;
         }
     }
 }
