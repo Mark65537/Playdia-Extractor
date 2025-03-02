@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.757
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playdia", "Playdia\Playdia.csproj", "{B0A734EC-0F56-4675-9A20-3A9D462E6AAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISO9660", "ISO9660\ISO9660.csproj", "{BCB0CD91-0ED3-4E6E-A0F3-032B191EA51F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaydiaControls", "PlaydiaControls\PlaydiaControls.csproj", "{89341D60-D2A1-4CB1-9C20-99E4E84AFC51}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F01FB3C-FE28-4D63-A5A9-BBFC3FA5720A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
