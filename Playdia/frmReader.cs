@@ -6,19 +6,11 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.IO;
 using ISO9660;
 using PlaydiaControls;
+using System;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace Playdia
 {
@@ -36,7 +28,7 @@ namespace Playdia
         private void btnPrev_Click(object sender, EventArgs e)
         {
             if (sectorPos <= 0)
-                sectorPos = discimg.NbSectors-1;
+                sectorPos = discimg.NbSectors - 1;
             else
                 sectorPos--;
             //RefreshSectorInfo();
@@ -44,7 +36,7 @@ namespace Playdia
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            if (sectorPos >= discimg.NbSectors-1)
+            if (sectorPos >= discimg.NbSectors - 1)
                 sectorPos = 0;
             else
                 sectorPos++;
@@ -52,13 +44,13 @@ namespace Playdia
         }
 
         void OpenToolStripMenuItemClick(object sender, EventArgs e)
-		{
-            if(openFileDialog1.ShowDialog()==DialogResult.OK)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 TreeNode vdNode = tvSectors.Nodes["nodeVolumeDescriptors"];
                 vdNode.Nodes.Clear();
                 discimg = new ISO9660.Image(openFileDialog1.FileName);
-                foreach(VolumeDescriptor vd in discimg.VolumeDescriptors)
+                foreach (VolumeDescriptor vd in discimg.VolumeDescriptors)
                 {
                     TreeNode node = vdNode.Nodes.Add(vd.VolumeDescriptorType.ToString());
                     node.Tag = vd;
@@ -66,7 +58,7 @@ namespace Playdia
                 TreeNode drNode = tvSectors.Nodes["nodeDirectoryRecords"];
                 drNode.Tag = discimg.RootDirectory;
                 drNode.Nodes.Clear();
-                foreach(DirectoryRecord dr in discimg.RootDirectory.Children)
+                foreach (DirectoryRecord dr in discimg.RootDirectory.Children)
                 {
                     TreeNode node = drNode.Nodes.Add(dr.FileIdentifier);
                     node.Tag = dr;
@@ -77,14 +69,14 @@ namespace Playdia
 
         private void tvSectors_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            if(e.Node.Parent!=null && e.Node.Parent.Name=="nodeVolumeDescriptors")
+            if (e.Node.Parent != null && e.Node.Parent.Name == "nodeVolumeDescriptors")
             {
                 this.pnlPrimaryVolumeDescriptor.Controls.Clear();
                 VolumeDescriptor vd = (VolumeDescriptor)e.Node.Tag;
                 VolumeDescriptorControl pvdctl = new VolumeDescriptorControl(vd);
                 this.pnlPrimaryVolumeDescriptor.Controls.Add(pvdctl);
             }
-            else if(e.Node.Parent!=null && e.Node.Parent.Name=="nodeDirectoryRecords")
+            else if (e.Node.Parent != null && e.Node.Parent.Name == "nodeDirectoryRecords")
             {
                 this.pnlDirectoryRecord.Controls.Clear();
                 DirectoryRecord dr = (DirectoryRecord)e.Node.Tag;
@@ -96,11 +88,11 @@ namespace Playdia
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TreeNode node = this.tvSectors.SelectedNode;
-            if(node!=null && node.Parent.Name=="nodeDirectoryRecords")
+            if (node != null && node.Parent.Name == "nodeDirectoryRecords")
             {
                 DirectoryRecord dr = (DirectoryRecord)node.Tag;
                 saveFileDialog1.FileName = dr.FileIdentifier;
-                if(saveFileDialog1.ShowDialog()==DialogResult.OK)
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     discimg.ExtractDirectoryRecord(dr, saveFileDialog1.FileName);
                 }

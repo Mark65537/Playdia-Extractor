@@ -36,8 +36,9 @@ namespace Playdia
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("DirectoryRecords");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("DirectoryRecords");
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReader));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -152,7 +153,7 @@ namespace Playdia
             this.tableLayoutPanel1.Controls.Add(this.splitContainer1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 24);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -165,7 +166,7 @@ namespace Playdia
             this.pnlSectors.Controls.Add(this.txtSectorStats);
             this.pnlSectors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlSectors.Location = new System.Drawing.Point(4, 413);
-            this.pnlSectors.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlSectors.Margin = new System.Windows.Forms.Padding(4);
             this.pnlSectors.Name = "pnlSectors";
             this.pnlSectors.Size = new System.Drawing.Size(1240, 238);
             this.pnlSectors.TabIndex = 0;
@@ -174,7 +175,7 @@ namespace Playdia
             // 
             this.txtSectorStats.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtSectorStats.Location = new System.Drawing.Point(0, 0);
-            this.txtSectorStats.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtSectorStats.Margin = new System.Windows.Forms.Padding(4);
             this.txtSectorStats.Multiline = true;
             this.txtSectorStats.Name = "txtSectorStats";
             this.txtSectorStats.Size = new System.Drawing.Size(1240, 238);
@@ -184,7 +185,7 @@ namespace Playdia
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(4, 4);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -203,15 +204,15 @@ namespace Playdia
             // 
             this.tvSectors.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvSectors.Location = new System.Drawing.Point(0, 0);
-            this.tvSectors.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tvSectors.Margin = new System.Windows.Forms.Padding(4);
             this.tvSectors.Name = "tvSectors";
-            treeNode5.Name = "nodeVolumeDescriptors";
-            treeNode5.Text = "VolumeDescriptors";
-            treeNode6.Name = "nodeDirectoryRecords";
-            treeNode6.Text = "DirectoryRecords";
+            treeNode1.Name = "nodeVolumeDescriptors";
+            treeNode1.Text = "VolumeDescriptors";
+            treeNode2.Name = "nodeDirectoryRecords";
+            treeNode2.Text = "DirectoryRecords";
             this.tvSectors.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6});
+            treeNode1,
+            treeNode2});
             this.tvSectors.Size = new System.Drawing.Size(413, 401);
             this.tvSectors.TabIndex = 0;
             this.tvSectors.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvSectors_AfterSelect);
@@ -224,7 +225,7 @@ namespace Playdia
             this.tableLayoutPanel2.Controls.Add(this.pnlPrimaryVolumeDescriptor, 0, 1);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 172F));
@@ -236,7 +237,7 @@ namespace Playdia
             // 
             this.pnlDirectoryRecord.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlDirectoryRecord.Location = new System.Drawing.Point(4, 4);
-            this.pnlDirectoryRecord.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlDirectoryRecord.Margin = new System.Windows.Forms.Padding(4);
             this.pnlDirectoryRecord.Name = "pnlDirectoryRecord";
             this.pnlDirectoryRecord.Size = new System.Drawing.Size(814, 164);
             this.pnlDirectoryRecord.TabIndex = 0;
@@ -245,7 +246,7 @@ namespace Playdia
             // 
             this.pnlPrimaryVolumeDescriptor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlPrimaryVolumeDescriptor.Location = new System.Drawing.Point(4, 176);
-            this.pnlPrimaryVolumeDescriptor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pnlPrimaryVolumeDescriptor.Margin = new System.Windows.Forms.Padding(4);
             this.pnlPrimaryVolumeDescriptor.Name = "pnlPrimaryVolumeDescriptor";
             this.pnlPrimaryVolumeDescriptor.Size = new System.Drawing.Size(814, 221);
             this.pnlPrimaryVolumeDescriptor.TabIndex = 1;
@@ -257,7 +258,8 @@ namespace Playdia
             this.ClientSize = new System.Drawing.Size(1248, 679);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.menuStrip1);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "frmReader";
             this.Text = "Playdia Extractor ";
             this.Load += new System.EventHandler(this.frmReader_Load);
