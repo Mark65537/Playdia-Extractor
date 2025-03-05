@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
+using System.Text;
 
 namespace ISO9660
 {
@@ -26,7 +24,7 @@ namespace ISO9660
             fs = new ImageStream(path, FileMode.Open);
             intNbSectors = (int)(fs.Length / 2352);
             readVolumeDescriptors();
-            if(volumeDescriptors.Count > 1)
+            if (volumeDescriptors.Count > 1)
             {
                 readDirectoryRecord((int)rootDirectory.ExtentLocation);
             }
@@ -61,7 +59,7 @@ namespace ISO9660
             int sectorId = 16;
             sector = fs.ReadXA1Sector(sectorId);
             vd = new VolumeDescriptor(sector.Data);
-            while(vd.VolumeDescriptorType!= VolumeDescriptorType.VolumeDescriptionSetTerminator && sectorId < intNbSectors)
+            while (vd.VolumeDescriptorType != VolumeDescriptorType.VolumeDescriptionSetTerminator && sectorId < intNbSectors)
             {
                 if (vd.StandardIdentifier == "CD001") //valid volume descriptor
                 {
@@ -80,7 +78,7 @@ namespace ISO9660
                 sector = fs.ReadXA1Sector(sectorId);
                 vd = new VolumeDescriptor(sector.Data);
             }
-            if(vd.StandardIdentifier=="CD001") //valid volume descriptor
+            if (vd.StandardIdentifier == "CD001") //valid volume descriptor
                 volumeDescriptors.Add(vd);
         }
 
@@ -89,16 +87,16 @@ namespace ISO9660
             PrimaryVolumeDescriptor pvd = (PrimaryVolumeDescriptor)volumeDescriptors[0];
             XASectorForm1 sector = fs.ReadXA1Sector(sectorId);
             int offset = 0;
-            while(sector.Data[offset] !=0)
+            while (sector.Data[offset] != 0)
             {
                 int size = sector.Data[offset];
                 byte[] data = new byte[size];
                 Array.Copy(sector.Data, offset, data, 0, size);
                 DirectoryRecord dr = new DirectoryRecord(data);
                 if (dr.FileIdentifierLength > 1)
-                    dr.FileIdentifier = Encoding.ASCII.GetString(data, 33, dr.FileIdentifierLength -2);
+                    dr.FileIdentifier = Encoding.ASCII.GetString(data, 33, dr.FileIdentifierLength - 2);
                 else
-                    switch(data[33])
+                    switch (data[33])
                     {
                         case 0:
                             dr.FileIdentifier = ".";
@@ -147,7 +145,7 @@ namespace ISO9660
         {
             int sectorId = (int)dr.ExtentLocation;
             int filecounter = 0;
-            List<byte> bytes= new List<byte>();
+            List<byte> bytes = new List<byte>();
             SectorHeader sh = fs.Sectors[sectorId];
             while ((sh.Submode & Submodes.EOF) == 0)
             {
@@ -167,21 +165,21 @@ namespace ISO9660
                 sh = fs.Sectors[sectorId];
             }
         }
-        public void ExtractAudio(DirectoryRecord dr, string path)
+
+        public void ExtractAudio(DirectoryRecord dr, string directory)
         {
             int sectorId = (int)dr.ExtentLocation;
-            int filecounter = 0;
-            Int32 prev1, prev2;
+            int fileCounter = 0;
+            Int32 prev1 = 0, prev2 = 0;
             List<Int16> pcms = new List<Int16>();
             SectorHeader sh = fs.Sectors[sectorId];
-            prev1 = 0;
-            prev2 = 0;
-            while ((sh.Submode & Submodes.EOF)==0)
+
+            while ((sh.Submode & Submodes.EOF) == 0)
             {
-                if((sh.Submode & Submodes.Audio) > 0)
+                if ((sh.Submode & Submodes.Audio) > 0)
                 {
-                    XASectorForm2 s = fs.ReadXA2Sector(sectorId); 
-                    for(int sg=0; sg<18; sg++)
+                    XASectorForm2 s = fs.ReadXA2Sector(sectorId);
+                    for (int sg = 0; sg < 18; sg++)
                     {
                         byte[] data = new byte[128];
                         Array.Copy(s.Data, sg * 128, data, 0, 128);
@@ -190,39 +188,44 @@ namespace ISO9660
                     }
                     if ((sh.Submode & Submodes.EOR) > 0)
                     {
-                        FileStream f = new FileStream(Path.Combine(path, "track" + filecounter.ToString("00") + ".wav"), FileMode.Create);
-                        BinaryWriter bw = new BinaryWriter(f);
-                        bw.Write(Encoding.ASCII.GetBytes("RIFF"));  // "RIFF"
-                        bw.Write((Int32)(pcms.Count * 2) + 36);                  // size of entire file with 16-bit data
-                        bw.Write(Encoding.ASCII.GetBytes("WAVE"));  // "WAVE"
-                                                                    // chunk 1:
-                        bw.Write(Encoding.ASCII.GetBytes("fmt "));  // "fmt "
-                        bw.Write((Int32)16);                        // size of chunk in bytes
-                        bw.Write((Int16)1);                         // 1 - for PCM
-                        bw.Write((Int16)1);                         // only Stereo files in this version
-                        bw.Write((Int32)44100);          // sample rate per second (usually 44100)
-                        bw.Write((Int32)(2 * 44100));    // bytes per second (usually 176400)
-                        bw.Write((Int16)2);                         // data align 4 bytes (2 bytes sample stereo)
-                        bw.Write((Int16)16);                        // only 16-bit in this version
-                                                                    // chunk 2:
-                        bw.Write(Encoding.ASCII.GetBytes("data"));  // "data"
-                        bw.Write((Int32)(pcms.Count * 2));   // size of audio data 16-bit
-                        foreach (Int16 pcm in pcms)
+                        string filePath = Path.Combine(directory, $"track{fileCounter:00}.wav");
+                        using (FileStream f = new FileStream(filePath, FileMode.Create))
+                        using (BinaryWriter bw = new BinaryWriter(f))
                         {
-                            bw.Write(pcm);
+                            bw.Write(Encoding.ASCII.GetBytes("RIFF"));  // "RIFF"
+                            bw.Write((Int32)(pcms.Count * 2) + 36);     // size of entire file with 16-bit data
+                            bw.Write(Encoding.ASCII.GetBytes("WAVE"));  // "WAVE"
+                                                                        // chunk 1:
+                            bw.Write(Encoding.ASCII.GetBytes("fmt "));  // "fmt "
+                            bw.Write((Int32)16);                        // size of chunk in bytes
+                            bw.Write((Int16)1);                         // 1 - for PCM
+                            bw.Write((Int16)1);                         // only Stereo files in this version
+                            bw.Write((Int32)44100);          // sample rate per second (usually 44100)
+                            bw.Write((Int32)(2 * 44100));    // bytes per second (usually 176400)
+                            bw.Write((Int16)2);                         // data align 4 bytes (2 bytes sample stereo)
+                            bw.Write((Int16)16);                        // only 16-bit in this version
+                                                                        // chunk 2:
+                            bw.Write(Encoding.ASCII.GetBytes("data"));  // "data"
+                            bw.Write((Int32)(pcms.Count * 2));   // size of audio data 16-bit
+
+                            foreach (Int16 pcm in pcms)
+                            {
+                                bw.Write(pcm);
+                            }
+
                         }
-                        bw.Flush();
-                        bw.Close();
-                        f.Close();
-                        pcms = new List<Int16>();
+
+                        pcms.Clear();
                         prev1 = 0;
                         prev2 = 0;
-                        filecounter++;
+                        fileCounter++;
                     }
                 }
                 sectorId++;
                 sh = fs.Sectors[sectorId];
             }
         }
+
+
     }
 }

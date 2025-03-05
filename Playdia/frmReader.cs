@@ -9,6 +9,7 @@
 using ISO9660;
 using PlaydiaControls;
 using System;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -110,10 +111,13 @@ namespace Playdia
             if (node != null && node.Parent.Name == "nodeDirectoryRecords")
             {
                 DirectoryRecord dr = (DirectoryRecord)node.Tag;
-                folderBrowserDialog1.SelectedPath = "C:\\Temp";
-                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                saveFileDialog1.FileName = "track00.wav";
+                saveFileDialog1.Filter = "WAV files (*.wav)|*.wav";
+                saveFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    discimg.ExtractAudio(dr, folderBrowserDialog1.SelectedPath);
+                    string directory = Path.GetDirectoryName(saveFileDialog1.FileName);
+                    discimg.ExtractAudio(dr, directory);
                 }
             }
         }
