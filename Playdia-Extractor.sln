@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playdia", "Playdia\Playdia.csproj", "{B0A734EC-0F56-4675-9A20-3A9D462E6AAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Playdia Extractor", "Playdia\Playdia Extractor.csproj", "{B0A734EC-0F56-4675-9A20-3A9D462E6AAB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ISO9660", "ISO9660\ISO9660.csproj", "{BCB0CD91-0ED3-4E6E-A0F3-032B191EA51F}"
 EndProject
