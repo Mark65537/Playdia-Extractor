@@ -111,7 +111,7 @@ namespace Playdia
             if (node != null && node.Parent.Name == "nodeDirectoryRecords")
             {
                 DirectoryRecord dr = (DirectoryRecord)node.Tag;
-                saveFileDialog1.FileName = "track.wav";
+                saveFileDialog1.FileName = "track";
                 saveFileDialog1.Filter = "WAV files (*.wav)|*.wav";
                 saveFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
@@ -128,10 +128,13 @@ namespace Playdia
             if (node != null && node.Parent.Name == "nodeDirectoryRecords")
             {
                 DirectoryRecord dr = (DirectoryRecord)node.Tag;
-                folderBrowserDialog1.SelectedPath = "C:\\Temp";
-                if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+                saveFileDialog1.FileName = "video";
+                saveFileDialog1.Filter = "STR files (*.str)|*.str";
+                saveFileDialog1.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    discimg.ExtractVideo(dr, folderBrowserDialog1.SelectedPath);
+                    string directory = Path.GetDirectoryName(saveFileDialog1.FileName);
+                    discimg.ExtractVideo(dr, directory);
                 }
             }
         }

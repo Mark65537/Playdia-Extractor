@@ -63,6 +63,14 @@ namespace Playdia
             this.tP_Extractor = new System.Windows.Forms.TabPage();
             this.tP_Player = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Save = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Sectors = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Details = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlSectors.SuspendLayout();
@@ -74,6 +82,8 @@ namespace Playdia
             this.tC_Extractor.SuspendLayout();
             this.tP_Extractor.SuspendLayout();
             this.tP_Player.SuspendLayout();
+            this.tableLayoutPanel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -107,42 +117,42 @@ namespace Playdia
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItemClick);
             // 
             // extractAudioToolStripMenuItem
             // 
             this.extractAudioToolStripMenuItem.Name = "extractAudioToolStripMenuItem";
-            this.extractAudioToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.extractAudioToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.extractAudioToolStripMenuItem.Text = "Extract &Audio";
             this.extractAudioToolStripMenuItem.Click += new System.EventHandler(this.extractAudioToolStripMenuItem_Click);
             // 
             // extractVideoToolStripMenuItem
             // 
             this.extractVideoToolStripMenuItem.Name = "extractVideoToolStripMenuItem";
-            this.extractVideoToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.extractVideoToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.extractVideoToolStripMenuItem.Text = "Extract &Video";
             this.extractVideoToolStripMenuItem.Click += new System.EventHandler(this.extractVideoToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.saveAsToolStripMenuItem.Text = "&Save as..";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // sectorStatsToolStripMenuItem
             // 
             this.sectorStatsToolStripMenuItem.Name = "sectorStatsToolStripMenuItem";
-            this.sectorStatsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.sectorStatsToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.sectorStatsToolStripMenuItem.Text = "Sect&or Stats";
             this.sectorStatsToolStripMenuItem.Click += new System.EventHandler(this.sectorStatsToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             // 
             // toolStripMenuItem1
@@ -277,7 +287,7 @@ namespace Playdia
             this.tP_Player.Location = new System.Drawing.Point(4, 22);
             this.tP_Player.Name = "tP_Player";
             this.tP_Player.Padding = new System.Windows.Forms.Padding(3);
-            this.tP_Player.Size = new System.Drawing.Size(961, 558);
+            this.tP_Player.Size = new System.Drawing.Size(943, 607);
             this.tP_Player.TabIndex = 1;
             this.tP_Player.Text = "Player";
             this.tP_Player.UseVisualStyleBackColor = true;
@@ -287,13 +297,77 @@ namespace Playdia
             this.tableLayoutPanel3.ColumnCount = 2;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 66.59483F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.40517F));
+            this.tableLayoutPanel3.Controls.Add(this.dataGridView1, 0, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(955, 552);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(937, 601);
             this.tableLayoutPanel3.TabIndex = 0;
+            // 
+            // dataGridView1
+            // 
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Number,
+            this.Save,
+            this.Name,
+            this.Type,
+            this.Sectors,
+            this.Offset,
+            this.Details});
+            this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridView1.Location = new System.Drawing.Point(3, 3);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.Size = new System.Drawing.Size(617, 595);
+            this.dataGridView1.TabIndex = 0;
+            // 
+            // Number
+            // 
+            this.Number.HeaderText = "#";
+            this.Number.MinimumWidth = 30;
+            this.Number.Name = "Number";
+            this.Number.ReadOnly = true;
+            this.Number.Width = 30;
+            // 
+            // Save
+            // 
+            this.Save.HeaderText = "Save";
+            this.Save.MinimumWidth = 40;
+            this.Save.Name = "Save";
+            this.Save.Width = 40;
+            // 
+            // Name
+            // 
+            this.Name.HeaderText = "Name";
+            this.Name.Name = "Name";
+            // 
+            // Type
+            // 
+            this.Type.HeaderText = "Type";
+            this.Type.Name = "Type";
+            this.Type.ReadOnly = true;
+            // 
+            // Sectors
+            // 
+            this.Sectors.HeaderText = "Sectors";
+            this.Sectors.Name = "Sectors";
+            this.Sectors.ReadOnly = true;
+            // 
+            // Offset
+            // 
+            this.Offset.HeaderText = "Offset";
+            this.Offset.Name = "Offset";
+            this.Offset.ReadOnly = true;
+            // 
+            // Details
+            // 
+            this.Details.HeaderText = "Details";
+            this.Details.Name = "Details";
+            this.Details.ReadOnly = true;
             // 
             // frmReader
             // 
@@ -319,6 +393,8 @@ namespace Playdia
             this.tC_Extractor.ResumeLayout(false);
             this.tP_Extractor.ResumeLayout(false);
             this.tP_Player.ResumeLayout(false);
+            this.tableLayoutPanel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -349,5 +425,13 @@ namespace Playdia
         private System.Windows.Forms.TabPage tP_Extractor;
         private System.Windows.Forms.TabPage tP_Player;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Number;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn Save;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Type;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Sectors;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Offset;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Details;
     }
 }
