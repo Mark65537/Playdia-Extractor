@@ -22,8 +22,17 @@ namespace Playdia
         public frmReader()
         {
             InitializeComponent();
+        }
+
+        private void frmReader_Load(object sender, EventArgs e)
+        {
             sectorPos = 0;
             discimg = null;
+            Text += Assembly.GetExecutingAssembly().GetName().Version;
+#if DEBUG
+            Text += " (DEBUG)";
+            LoadISOImage(@"H:\Playdia\games\bandai_playdia_quick_interactive_system\Dragon Ball Z - Shin Saiyajin Zetsumetsu Keikaku - Chikyuu-hen (Japan)\Dragon Ball Z - Shin Saiyajin Zetsumetsu Keikaku - Chikyuu-hen (Japan).cue");
+#endif
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
@@ -48,24 +57,37 @@ namespace Playdia
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                TreeNode vdNode = tvSectors.Nodes["nodeVolumeDescriptors"];
-                vdNode.Nodes.Clear();
-                discimg = new ISO9660.Image(openFileDialog1.FileName);
-                foreach (VolumeDescriptor vd in discimg.VolumeDescriptors)
-                {
-                    TreeNode node = vdNode.Nodes.Add(vd.VolumeDescriptorType.ToString());
-                    node.Tag = vd;
-                }
-                TreeNode drNode = tvSectors.Nodes["nodeDirectoryRecords"];
-                drNode.Tag = discimg.RootDirectory;
-                drNode.Nodes.Clear();
-                foreach (DirectoryRecord dr in discimg.RootDirectory.Children)
-                {
-                    TreeNode node = drNode.Nodes.Add(dr.FileIdentifier);
-                    node.Tag = dr;
-                }
-                this.txtSectorStats.Text = discimg.SectorStats();
+                LoadISOImage();
             }
+        }
+
+        /// <summary>
+        /// Загрузить ISO image из openFileDialog1
+        /// </summary>
+        private void LoadISOImage()
+        {
+            LoadISOImage(openFileDialog1.FileName);
+        }
+
+        private void LoadISOImage(string filePath)
+        {
+            TreeNode vdNode = tvSectors.Nodes["nodeVolumeDescriptors"];
+            vdNode.Nodes.Clear();
+            discimg = new ISO9660.Image(filePath);
+            foreach (VolumeDescriptor vd in discimg.VolumeDescriptors)
+            {
+                TreeNode node = vdNode.Nodes.Add(vd.VolumeDescriptorType.ToString());
+                node.Tag = vd;
+            }
+            TreeNode drNode = tvSectors.Nodes["nodeDirectoryRecords"];
+            drNode.Tag = discimg.RootDirectory;
+            drNode.Nodes.Clear();
+            foreach (DirectoryRecord dr in discimg.RootDirectory.Children)
+            {
+                TreeNode node = drNode.Nodes.Add(dr.FileIdentifier);
+                node.Tag = dr;
+            }
+            this.txtSectorStats.Text = discimg.SectorStats();
         }
 
         private void tvSectors_AfterSelect(object sender, TreeViewEventArgs e)
@@ -139,9 +161,6 @@ namespace Playdia
             }
         }
 
-        private void frmReader_Load(object sender, EventArgs e)
-        {
-            Text += Assembly.GetExecutingAssembly().GetName().Version;
-        }
+
     }
 }
