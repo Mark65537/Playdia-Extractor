@@ -64,13 +64,13 @@ namespace Playdia
             this.tP_Player = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.Number = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Save = new System.Windows.Forms.DataGridViewCheckBoxColumn();
-            this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Type = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Sectors = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Offset = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Details = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColNumber = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColSave = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.ColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColSectors = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColOffset = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColDetails = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlSectors.SuspendLayout();
@@ -312,62 +312,62 @@ namespace Playdia
             this.dataGridView1.AllowUserToDeleteRows = false;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Number,
-            this.Save,
-            this.Name,
-            this.Type,
-            this.Sectors,
-            this.Offset,
-            this.Details});
+            this.ColNumber,
+            this.ColSave,
+            this.ColName,
+            this.ColType,
+            this.ColSectors,
+            this.ColOffset,
+            this.ColDetails});
             this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(617, 595);
             this.dataGridView1.TabIndex = 0;
             // 
-            // Number
+            // ColNumber
             // 
-            this.Number.HeaderText = "#";
-            this.Number.MinimumWidth = 30;
-            this.Number.Name = "Number";
-            this.Number.ReadOnly = true;
-            this.Number.Width = 30;
+            this.ColNumber.HeaderText = "#";
+            this.ColNumber.MinimumWidth = 30;
+            this.ColNumber.Name = "ColNumber";
+            this.ColNumber.ReadOnly = true;
+            this.ColNumber.Width = 30;
             // 
-            // Save
+            // ColSave
             // 
-            this.Save.HeaderText = "Save";
-            this.Save.MinimumWidth = 40;
-            this.Save.Name = "Save";
-            this.Save.Width = 40;
+            this.ColSave.HeaderText = "Save";
+            this.ColSave.MinimumWidth = 40;
+            this.ColSave.Name = "ColSave";
+            this.ColSave.Width = 40;
             // 
-            // Name
+            // ColName
             // 
-            this.Name.HeaderText = "Name";
-            this.Name.Name = "Name";
+            this.ColName.HeaderText = "Name";
+            this.ColName.Name = "ColName";
             // 
-            // Type
+            // ColType
             // 
-            this.Type.HeaderText = "Type";
-            this.Type.Name = "Type";
-            this.Type.ReadOnly = true;
+            this.ColType.HeaderText = "Type";
+            this.ColType.Name = "ColType";
+            this.ColType.ReadOnly = true;
             // 
-            // Sectors
+            // ColSectors
             // 
-            this.Sectors.HeaderText = "Sectors";
-            this.Sectors.Name = "Sectors";
-            this.Sectors.ReadOnly = true;
+            this.ColSectors.HeaderText = "Sectors";
+            this.ColSectors.Name = "ColSectors";
+            this.ColSectors.ReadOnly = true;
             // 
-            // Offset
+            // ColOffset
             // 
-            this.Offset.HeaderText = "Offset";
-            this.Offset.Name = "Offset";
-            this.Offset.ReadOnly = true;
+            this.ColOffset.HeaderText = "Offset";
+            this.ColOffset.Name = "ColOffset";
+            this.ColOffset.ReadOnly = true;
             // 
-            // Details
+            // ColDetails
             // 
-            this.Details.HeaderText = "Details";
-            this.Details.Name = "Details";
-            this.Details.ReadOnly = true;
+            this.ColDetails.HeaderText = "Details";
+            this.ColDetails.Name = "ColDetails";
+            this.ColDetails.ReadOnly = true;
             // 
             // frmReader
             // 
@@ -426,12 +426,12 @@ namespace Playdia
         private System.Windows.Forms.TabPage tP_Player;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Number;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Save;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Type;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Sectors;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Offset;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Details;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColNumber;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn ColSave;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColSectors;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColOffset;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColDetails;
     }
 }
