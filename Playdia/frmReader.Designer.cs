@@ -39,7 +39,7 @@ namespace Playdia
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("VolumeDescriptors");
             System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("DirectoryRecords");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReader));
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.oFD_main = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,7 +91,7 @@ namespace Playdia
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "Cue sheets (*.cue)|*.cue";
+            this.oFD_main.Filter = "Cue sheets (*.cue)|*.cue";
             // 
             // menuStrip1
             // 
@@ -317,6 +317,7 @@ namespace Playdia
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(617, 595);
             this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellDoubleClick);
             // 
             // ColNumber
             // 
@@ -418,7 +419,7 @@ namespace Playdia
         }
 
         #endregion
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.OpenFileDialog oFD_main;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;

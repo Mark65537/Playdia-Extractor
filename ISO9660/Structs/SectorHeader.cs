@@ -107,15 +107,15 @@ namespace ISO9660
         {
             get { return (byte)((_sector.subheader[0] & 0xFF000000) >> 24); }
         }
-        public String ChannelMode
+        public string ChannelMode
         {
             get { return ((Coding & 0x01) > 0) ? "Stereo" : "Mono"; }
         }
-        public String SampleRate
+        public string SampleRate
         {
             get { return ((Coding & 0x04) > 0) ? "18.9kHz" : "37.8kHz"; }
         }
-        public String BitsPerSample
+        public string BitsPerSample
         {
             get { return ((Coding & 0x10) > 0) ? "8bit" : "4bit"; }
         }

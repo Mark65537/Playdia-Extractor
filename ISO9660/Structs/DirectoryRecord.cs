@@ -12,9 +12,9 @@ using System.Runtime.InteropServices;
 
 namespace ISO9660
 {
-	/// <summary>
-	/// Description of DirectoryRecord.
-	/// </summary>
+    /// <summary>
+    /// Description of DirectoryRecord.
+    /// </summary>
     /// 
     [Flags]
     public enum FileFlags
@@ -28,7 +28,7 @@ namespace ISO9660
         Reserved2 = 0x40,
         MultiExtent = 0x80
     }
-    [StructLayout(LayoutKind.Sequential,Size =34,Pack =1)]
+    [StructLayout(LayoutKind.Sequential, Size = 34, Pack = 1)]
     public struct _DirectoryRecord
     {
         [MarshalAs(UnmanagedType.U1)]
@@ -60,40 +60,35 @@ namespace ISO9660
         [MarshalAs(UnmanagedType.U1)]
         public byte padding;
     }
-	public class DirectoryRecord
-	{
-        private _DirectoryRecord dr;
-        private List<DirectoryRecord> children;
+    public class DirectoryRecord
+    {
+        private _DirectoryRecord _dirRec = new _DirectoryRecord();
+        private readonly List<DirectoryRecord> _children = new List<DirectoryRecord>();
         private string fi;
-        public DirectoryRecord()
-		{
-            dr = new _DirectoryRecord();
-            children = new List<DirectoryRecord>();
 
-        }
-        public DirectoryRecord(byte[] data) : this()
+        public DirectoryRecord(byte[] data)
         {
             ReadBytes(data);
         }
         public byte Length
         {
-            get { return dr.LengthDR; }
-            set { dr.LengthDR = value; }
+            get { return _dirRec.LengthDR; }
+            set { _dirRec.LengthDR = value; }
         }
         public byte AttributeLength
         {
-            get { return dr.LengthAR; }
-            set { dr.LengthAR = value; }
+            get { return _dirRec.LengthAR; }
+            set { _dirRec.LengthAR = value; }
         }
         public UInt32 ExtentLocation
         {
-            get { return dr.ExtentLocation; }
-            set { dr.ExtentLocation = value; }
+            get { return _dirRec.ExtentLocation; }
+            set { _dirRec.ExtentLocation = value; }
         }
         public UInt32 DataLength
         {
-            get { return dr.DataLength; }
-            set { dr.DataLength = value; }
+            get { return _dirRec.DataLength; }
+            set { _dirRec.DataLength = value; }
         }
 
         public DateTime RecordingDate
@@ -101,48 +96,48 @@ namespace ISO9660
             get
             {
                 return new DateTime(
-                    dr.RecordingDate.year, 
-                    dr.RecordingDate.month, 
-                    dr.RecordingDate.day, 
-                    dr.RecordingDate.hour, 
-                    dr.RecordingDate.minute, 
-                    dr.RecordingDate.second
+                    _dirRec.RecordingDate.year,
+                    _dirRec.RecordingDate.month,
+                    _dirRec.RecordingDate.day,
+                    _dirRec.RecordingDate.hour,
+                    _dirRec.RecordingDate.minute,
+                    _dirRec.RecordingDate.second
                 );
             }
             set
             {
-                dr.RecordingDate.year = (byte)value.Year;
-                dr.RecordingDate.month = (byte)value.Month;
-                dr.RecordingDate.day = (byte)value.Day;
-                dr.RecordingDate.hour = (byte)value.Hour;
-                dr.RecordingDate.minute = (byte)value.Minute;
-                dr.RecordingDate.second = (byte)value.Second;
+                _dirRec.RecordingDate.year = (byte)value.Year;
+                _dirRec.RecordingDate.month = (byte)value.Month;
+                _dirRec.RecordingDate.day = (byte)value.Day;
+                _dirRec.RecordingDate.hour = (byte)value.Hour;
+                _dirRec.RecordingDate.minute = (byte)value.Minute;
+                _dirRec.RecordingDate.second = (byte)value.Second;
             }
         }
         public FileFlags Flags
         {
-            get { return (FileFlags)dr.FileFlags;}
-            set { dr.FileFlags = (byte)value; }
+            get { return (FileFlags)_dirRec.FileFlags; }
+            set { _dirRec.FileFlags = (byte)value; }
         }
         public byte FileUnitSize
         {
-            get { return dr.FileUnitSize; }
-            set { dr.FileUnitSize = value; }
+            get { return _dirRec.FileUnitSize; }
+            set { _dirRec.FileUnitSize = value; }
         }
         public byte InterleaveGapSize
         {
-            get { return dr.InterleaveGapSize; }
-            set { dr.InterleaveGapSize = value; }
+            get { return _dirRec.InterleaveGapSize; }
+            set { _dirRec.InterleaveGapSize = value; }
         }
         public UInt16 VolumeSequenceNumber
         {
-            get { return dr.VolumeSequenceNumber; }
-            set { dr.VolumeSequenceNumber = value; }
+            get { return _dirRec.VolumeSequenceNumber; }
+            set { _dirRec.VolumeSequenceNumber = value; }
         }
         public byte FileIdentifierLength
         {
-            get { return dr.LengthFI; }
-            set { dr.LengthFI = value; }
+            get { return _dirRec.LengthFI; }
+            set { _dirRec.LengthFI = value; }
         }
         public string FileIdentifier
         {
@@ -151,20 +146,20 @@ namespace ISO9660
         }
         public List<DirectoryRecord> Children
         {
-            get { return children; }
+            get { return _children; }
         }
         public void ReadBytes(byte[] data)
         {
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            dr = (_DirectoryRecord)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(_DirectoryRecord));
+            _dirRec = (_DirectoryRecord)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(_DirectoryRecord));
             handle.Free();
         }
         public byte[] GetBytes()
         {
-            int size = Marshal.SizeOf(dr);
+            int size = Marshal.SizeOf(_dirRec);
             byte[] result = new byte[size];
-            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(dr));
-            Marshal.StructureToPtr(dr, ptr, true);
+            IntPtr ptr = Marshal.AllocHGlobal(Marshal.SizeOf(_dirRec));
+            Marshal.StructureToPtr(_dirRec, ptr, true);
             Marshal.Copy(ptr, result, 0, size);
             Marshal.FreeHGlobal(ptr);
             return result;

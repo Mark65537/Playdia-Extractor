@@ -11,6 +11,7 @@ using PlaydiaControls;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -18,8 +19,9 @@ namespace Playdia
 {
     public partial class frmReader : Form
     {
-        ISO9660.Image discimg;
-        int sectorPos;
+        ISO9660.Image _discimg;
+        int _sectorPos;
+
         public frmReader()
         {
             InitializeComponent();
@@ -27,74 +29,113 @@ namespace Playdia
 
         private void frmReader_Load(object sender, EventArgs e)
         {
-            sectorPos = 0;
-            discimg = null;
             Text += Assembly.GetExecutingAssembly().GetName().Version;
 #if DEBUG
             Text += " (DEBUG)";
             LoadISOImage(@"H:\Playdia\games\bandai_playdia_quick_interactive_system\Dragon Ball Z - Shin Saiyajin Zetsumetsu Keikaku - Chikyuu-hen (Japan)\Dragon Ball Z - Shin Saiyajin Zetsumetsu Keikaku - Chikyuu-hen (Japan).cue");
+            UpdateSectorStats();
+            LoadPlayerTBL();
 #endif
         }
 
         private void btnPrev_Click(object sender, EventArgs e)
         {
-            if (sectorPos <= 0)
-                sectorPos = discimg.NbSectors - 1;
+            if (_sectorPos <= 0)
+                _sectorPos = _discimg.NbSectors - 1;
             else
-                sectorPos--;
+                _sectorPos--;
             //RefreshSectorInfo();
         }
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            if (sectorPos >= discimg.NbSectors - 1)
-                sectorPos = 0;
+            if (_sectorPos >= _discimg.NbSectors - 1)
+                _sectorPos = 0;
             else
-                sectorPos++;
+                _sectorPos++;
             //RefreshSectorInfo();
         }
 
-        void OpenToolStripMenuItemClick(object sender, EventArgs e)
+        private void OpenToolStripMenuItemClick(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            if (oFD_main.ShowDialog() == DialogResult.OK)
             {
-                LoadISOImage();
+                LoadISOImage(oFD_main.FileName);
+                UpdateSectorStats();
+                LoadPlayerTBL();
             }
         }
 
-        /// <summary>
-        /// Загрузить ISO image из openFileDialog1
-        /// </summary>
-        private void LoadISOImage()
+        private void LoadPlayerTBL()
         {
-            LoadISOImage(openFileDialog1.FileName);
+            dataGridView1.Rows.Clear();
+            var audioFiles = _discimg.GetAudio();
+
+            for (int i = 0; i < audioFiles.Count; i++)
+            {
+
+                dataGridView1.Rows.Add(
+                    i,
+                    false,
+                    $"track{i}",
+                    "Audio",
+                    ""
+                //$"{sh.ChannelMode}, {sh.SampleRate}, {sh.BitsPerSample}"
+                );
+            }
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
+            {
+                var row = dataGridView1.Rows[e.RowIndex];
+                string trackName = row.Cells["ColName"].Value.ToString();
+
+                // Создаем временную директорию для аудио файлов
+                string tempDir = Path.Combine(Path.GetTempPath(), "PlaydiaAudio");
+                Directory.CreateDirectory(tempDir);
+
+                // Извлекаем аудио
+                var dr = _discimg.RootDirectory.Children.FirstOrDefault(x => x.FileIdentifier == trackName);
+                if (dr != null)
+                {
+                    _discimg.ExtractAudio(dr, tempDir);
+
+                    // Воспроизводим первый WAV файл из директории
+                    var wavFiles = Directory.GetFiles(tempDir, "*.wav");
+                    if (wavFiles.Length > 0)
+                    {
+                        System.Diagnostics.Process.Start(wavFiles[0]);
+                    }
+                }
+            }
         }
 
         private void LoadISOImage(string filePath)
         {
             TreeNode vdNode = tvSectors.Nodes["nodeVolumeDescriptors"];
             vdNode.Nodes.Clear();
-            discimg = new ISO9660.Image(filePath);
-            foreach (VolumeDescriptor vd in discimg.VolumeDescriptors)
+            _discimg = new ISO9660.Image(filePath);
+            foreach (VolumeDescriptor vd in _discimg.VolumeDescriptors)
             {
                 TreeNode node = vdNode.Nodes.Add(vd.VolumeDescriptorType.ToString());
                 node.Tag = vd;
             }
             TreeNode drNode = tvSectors.Nodes["nodeDirectoryRecords"];
-            drNode.Tag = discimg.RootDirectory;
+            drNode.Tag = _discimg.RootDirectory;
             drNode.Nodes.Clear();
-            foreach (DirectoryRecord dr in discimg.RootDirectory.Children)
+            foreach (DirectoryRecord dr in _discimg.RootDirectory.Children)
             {
                 TreeNode node = drNode.Nodes.Add(dr.FileIdentifier);
                 node.Tag = dr;
             }
-            UpdateSectorStats();
         }
 
         private void UpdateSectorStats()
         {
             txtSectorStats.Rows.Clear();
-            Dictionary<string, int> stats = discimg.GetSectorStats();
+            Dictionary<string, int> stats = _discimg.GetSectorStats();
 
             foreach (KeyValuePair<string, int> stat in stats)
             {
@@ -130,11 +171,12 @@ namespace Playdia
                 saveFileDialog1.FileName = dr.FileIdentifier;
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
-                    discimg.ExtractDirectoryRecord(dr, saveFileDialog1.FileName);
+                    _discimg.ExtractDirectoryRecord(dr, saveFileDialog1.FileName);
                 }
             }
         }
 
+        //TODO: переименовать
         private void sectorStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             UpdateSectorStats();
@@ -152,7 +194,7 @@ namespace Playdia
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     string directory = Path.GetDirectoryName(saveFileDialog1.FileName);
-                    discimg.ExtractAudio(dr, directory);
+                    _discimg.ExtractAudio(dr, directory);
                 }
             }
         }
@@ -169,7 +211,7 @@ namespace Playdia
                 if (saveFileDialog1.ShowDialog() == DialogResult.OK)
                 {
                     string directory = Path.GetDirectoryName(saveFileDialog1.FileName);
-                    discimg.ExtractVideo(dr, directory);
+                    _discimg.ExtractVideo(dr, directory);
                 }
             }
         }

@@ -7,48 +7,41 @@ namespace ISO9660
 {
     public class Image
     {
-        private int intNbSectors;
-        private ImageStream fs;
-        private List<VolumeDescriptor> volumeDescriptors;
-        private DirectoryRecord rootDirectory;
+        private readonly int _SectorsCount;
+        private readonly ImageStream _imgStream;
+        private readonly List<VolumeDescriptor> _volumeDescriptors = new List<VolumeDescriptor>();
+        private DirectoryRecord _rootDirectory;
 
-        public Image()
+        public Image(string path)
         {
-            fs = null;
-            intNbSectors = 0;
-            volumeDescriptors = new List<VolumeDescriptor>();
-        }
-
-        public Image(string path) : this()
-        {
-            fs = new ImageStream(path, FileMode.Open);
-            intNbSectors = (int)(fs.Length / 2352);// тоже самое как Sectors.Count
+            _imgStream = new ImageStream(path, FileMode.Open);
+            _SectorsCount = (int)(_imgStream.Length / 2352);// тоже самое как Sectors.Count
             readVolumeDescriptors();
-            if (volumeDescriptors.Count > 1)
+            if (_volumeDescriptors.Count > 1)
             {
-                readDirectoryRecord((int)rootDirectory.ExtentLocation);
+                readDirectoryRecord((int)_rootDirectory.ExtentLocation);
             }
-            fs.Close();
+            _imgStream.Close();
         }
 
         public XASectorForm1 this[int index]
         {
-            get { return fs.ReadXA1Sector(index); }
+            get { return _imgStream.ReadXA1Sector(index); }
         }
 
         public int NbSectors
         {
-            get { return intNbSectors; }
+            get { return _SectorsCount; }
         }
 
         public List<VolumeDescriptor> VolumeDescriptors
         {
-            get { return volumeDescriptors; }
+            get { return _volumeDescriptors; }
         }
 
         public DirectoryRecord RootDirectory
         {
-            get { return rootDirectory; }
+            get { return _rootDirectory; }
         }
 
 
@@ -57,9 +50,9 @@ namespace ISO9660
             XASectorForm1 sector;
             VolumeDescriptor vd;
             int sectorId = 16;
-            sector = fs.ReadXA1Sector(sectorId);
+            sector = _imgStream.ReadXA1Sector(sectorId);
             vd = new VolumeDescriptor(sector.Data);
-            while (vd.VolumeDescriptorType != VolumeDescriptorType.VolumeDescriptionSetTerminator && sectorId < intNbSectors)
+            while (vd.VolumeDescriptorType != VolumeDescriptorType.VolumeDescriptionSetTerminator && sectorId < _SectorsCount)
             {
                 if (vd.StandardIdentifier == "CD001") //valid volume descriptor
                 {
@@ -67,25 +60,25 @@ namespace ISO9660
                     {
                         case VolumeDescriptorType.PrimaryVolumeDescriptor:
                             PrimaryVolumeDescriptor pvd = new PrimaryVolumeDescriptor(sector.Data);
-                            rootDirectory = pvd.RootDirectoryRecord;
-                            volumeDescriptors.Add(pvd);
+                            _rootDirectory = pvd.RootDirectoryRecord;
+                            _volumeDescriptors.Add(pvd);
                             break;
                         default:
                             break;
                     }
                 }
                 sectorId++;
-                sector = fs.ReadXA1Sector(sectorId);
+                sector = _imgStream.ReadXA1Sector(sectorId);
                 vd = new VolumeDescriptor(sector.Data);
             }
             if (vd.StandardIdentifier == "CD001") //valid volume descriptor
-                volumeDescriptors.Add(vd);
+                _volumeDescriptors.Add(vd);
         }
 
         private void readDirectoryRecord(int sectorId)
         {
-            PrimaryVolumeDescriptor pvd = (PrimaryVolumeDescriptor)volumeDescriptors[0];
-            XASectorForm1 sector = fs.ReadXA1Sector(sectorId);
+            PrimaryVolumeDescriptor pvd = (PrimaryVolumeDescriptor)_volumeDescriptors[0];
+            XASectorForm1 sector = _imgStream.ReadXA1Sector(sectorId);
             int offset = 0;
             while (sector.Data[offset] != 0)
             {
@@ -108,14 +101,14 @@ namespace ISO9660
                             dr.FileIdentifier = "";
                             break;
                     }
-                rootDirectory.Children.Add(dr);
+                _rootDirectory.Children.Add(dr);
                 offset += size;
             }
         }
         public Dictionary<string, int> GetSectorStats()
         {
             Dictionary<string, int> stats = new Dictionary<string, int>();
-            foreach (SectorHeader s in fs.Sectors)
+            foreach (SectorHeader s in _imgStream.Sectors)
             {
                 string subheaderhex = s.SubHeader1.ToString("X8");
                 if (stats.ContainsKey(subheaderhex))
@@ -130,7 +123,7 @@ namespace ISO9660
         {
             int size = (int)dr.DataLength;
             byte[] buffer = new byte[size];
-            fs.Read(buffer, (int)dr.ExtentLocation, size);
+            _imgStream.Read(buffer, (int)dr.ExtentLocation, size);
             FileStream ds = new FileStream(path, FileMode.Create);
             ds.Write(buffer, 0, size);
             ds.Close();
@@ -141,12 +134,12 @@ namespace ISO9660
             int sectorId = (int)dr.ExtentLocation;
             int filecounter = 0;
             List<byte> bytes = new List<byte>();
-            SectorHeader sh = fs.Sectors[sectorId];
+            SectorHeader sh = _imgStream.Sectors[sectorId];
             while ((sh.Submode & Submodes.EOF) == 0)
             {
                 if ((sh.Submode & Submodes.Audio) == 0)
                 {
-                    XASectorForm1 s = fs.ReadXA1Sector(sectorId);
+                    XASectorForm1 s = _imgStream.ReadXA1Sector(sectorId);
                     bytes.AddRange(s.Data);
                     if ((sh.Submode & Submodes.EOR) > 0)
                     {
@@ -157,33 +150,33 @@ namespace ISO9660
                     }
                 }
                 sectorId++;
-                sh = fs.Sectors[sectorId];
+                sh = _imgStream.Sectors[sectorId];
             }
         }
 
-        public void ExtractAudio(DirectoryRecord dr, string directory)
+        public void ExtractAudio(DirectoryRecord dr, string outDir)
         {
             int sectorId = (int)dr.ExtentLocation;
             int fileCounter = 0;
             Int32 prev1 = 0, prev2 = 0;
             List<Int16> pcms = new List<Int16>();
-            SectorHeader sh = fs.Sectors[sectorId];
+            SectorHeader sh = _imgStream.Sectors[sectorId];
 
             while ((sh.Submode & Submodes.EOF) == 0)
             {
                 if ((sh.Submode & Submodes.Audio) > 0)
                 {
-                    XASectorForm2 s = fs.ReadXA2Sector(sectorId);
+                    XASectorForm2 xa2Sec = _imgStream.ReadXA2Sector(sectorId);
                     for (int sg = 0; sg < 18; sg++)
                     {
                         byte[] data = new byte[128];
-                        Array.Copy(s.Data, sg * 128, data, 0, 128);
+                        Array.Copy(xa2Sec.Data, sg * 128, data, 0, 128);
                         ADPCMBlock block = new ADPCMBlock(data);
-                        pcms.AddRange(block.getPCM(ref prev1, ref prev2));
+                        pcms.AddRange(block.GetPCM(ref prev1, ref prev2));
                     }
                     if ((sh.Submode & Submodes.EOR) > 0)
                     {
-                        string filePath = Path.Combine(directory, $"track{fileCounter:00}.wav");
+                        string filePath = Path.Combine(outDir, $"track{fileCounter:00}.wav");
                         using (FileStream f = new FileStream(filePath, FileMode.Create))
                         using (BinaryWriter bw = new BinaryWriter(f))
                         {
@@ -217,10 +210,54 @@ namespace ISO9660
                     }
                 }
                 sectorId++;
-                sh = fs.Sectors[sectorId];
+                sh = _imgStream.Sectors[sectorId];
             }
         }
 
+        public List<List<Int16>> GetAudio()
+        {
+            var audioFiles = new List<List<Int16>>();
+            int fileCounter = 0;
+            Int32 prev1 = 0, prev2 = 0;
+            List<Int16> pcms = new List<Int16>();
 
+            foreach (DirectoryRecord dr in RootDirectory.Children)
+            {
+                if (dr.FileIdentifier.EndsWith(".AJS"))
+                {
+                    int sectorId = (int)dr.ExtentLocation;
+                    SectorHeader sh = _imgStream.Sectors[sectorId];
+
+                    //TODO:
+                    while ((sh.Submode & Submodes.EOF) == 0)
+                    {
+                        if ((sh.Submode & Submodes.Audio) > 0)
+                        {
+                            XASectorForm2 xa2Sec = _imgStream.ReadXA2Sector(sectorId);
+                            for (int sg = 0; sg < 18; sg++)
+                            {
+                                byte[] data = new byte[128];
+                                Array.Copy(xa2Sec.Data, sg * 128, data, 0, 128);
+                                ADPCMBlock block = new ADPCMBlock(data);
+                                pcms.AddRange(block.GetPCM(ref prev1, ref prev2));
+                            }
+                            if ((sh.Submode & Submodes.EOR) > 0)
+                            {
+                                audioFiles.Add(pcms);
+
+                                pcms.Clear();
+                                prev1 = 0;
+                                prev2 = 0;
+                                fileCounter++;
+                            }
+                        }
+                        sectorId++;
+                        sh = _imgStream.Sectors[sectorId];
+                    }
+                }
+            }
+
+            return audioFiles;
+        }
     }
 }
