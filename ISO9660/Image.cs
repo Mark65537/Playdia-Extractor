@@ -22,7 +22,7 @@ namespace ISO9660
         public Image(string path) : this()
         {
             fs = new ImageStream(path, FileMode.Open);
-            intNbSectors = (int)(fs.Length / 2352);
+            intNbSectors = (int)(fs.Length / 2352);// тоже самое как Sectors.Count
             readVolumeDescriptors();
             if (volumeDescriptors.Count > 1)
             {
@@ -112,6 +112,19 @@ namespace ISO9660
                 offset += size;
             }
         }
+        public Dictionary<string, int> GetSectorStats()
+        {
+            Dictionary<string, int> stats = new Dictionary<string, int>();
+            foreach (SectorHeader s in fs.Sectors)
+            {
+                string subheaderhex = s.SubHeader1.ToString("X8");
+                if (stats.ContainsKey(subheaderhex))
+                    stats[subheaderhex]++;
+                else
+                    stats.Add(subheaderhex, 1);
+            }
+            return stats;
+        }
 
         public void ExtractDirectoryRecord(DirectoryRecord dr, string path)
         {
@@ -123,24 +136,6 @@ namespace ISO9660
             ds.Close();
         }
 
-        public string SectorStats()
-        {
-            Dictionary<string, int> stats = new Dictionary<string, int>();
-            foreach (SectorHeader s in fs.Sectors)
-            {
-                string subheaderhex = s.SubHeader1.ToString("X8");
-                if (stats.ContainsKey(subheaderhex))
-                    stats[subheaderhex]++;
-                else
-                    stats.Add(subheaderhex, 1);
-            }
-            string message = "";
-            foreach (KeyValuePair<string, int> stat in stats)
-            {
-                message += stat.Key + " : " + stat.Value.ToString() + "\r\n";
-            }
-            return message;
-        }
         public void ExtractVideo(DirectoryRecord dr, string path)
         {
             int sectorId = (int)dr.ExtentLocation;

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace ISO9660
@@ -24,10 +20,10 @@ namespace ISO9660
         RTS = 0x40,
         EOF = 0x80
     }
-    [StructLayout(LayoutKind.Sequential, Size=24,Pack=1)]
+    [StructLayout(LayoutKind.Sequential, Size = 24, Pack = 1)]
     struct _SectorHeader
     {
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst=12)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public string syncPattern;
         [MarshalAs(UnmanagedType.U1)]
         public byte minute;
@@ -37,7 +33,7 @@ namespace ISO9660
         public byte block;
         [MarshalAs(UnmanagedType.U1)]
         public byte mode;
-        [MarshalAs(UnmanagedType.ByValArray,SizeConst=2)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         public UInt32[] subheader;
     }
     public class SectorHeader
@@ -52,7 +48,7 @@ namespace ISO9660
             _sector = new _SectorHeader();
         }
 
-        public SectorHeader(byte[] data, int filestreamid, long filestreamoffset, SectorType type): this()
+        public SectorHeader(byte[] data, int filestreamid, long filestreamoffset, SectorType type) : this()
         {
             _filestreamid = filestreamid;
             _filestreamoffset = filestreamoffset;
@@ -62,13 +58,13 @@ namespace ISO9660
 
         public string SyncPattern
         {
-            get { return _sector.syncPattern;}
-            set { _sector.syncPattern = value;} 
+            get { return _sector.syncPattern; }
+            set { _sector.syncPattern = value; }
         }
-        public byte Minute 
-        { 
-            get {  return (byte)((_sector.minute & 0xf) + (10 * (_sector.minute >> 4))); } 
-            set { _sector.minute = (byte)((value % 10) | ((value /10) << 4)); } 
+        public byte Minute
+        {
+            get { return (byte)((_sector.minute & 0xf) + (10 * (_sector.minute >> 4))); }
+            set { _sector.minute = (byte)((value % 10) | ((value / 10) << 4)); }
         }
         public byte Second
         {
@@ -83,7 +79,7 @@ namespace ISO9660
         public byte Mode
         {
             get { return _sector.mode; }
-            set { _sector.mode = value;}
+            set { _sector.mode = value; }
         }
         public UInt32 SubHeader1
         {
@@ -113,7 +109,7 @@ namespace ISO9660
         }
         public String ChannelMode
         {
-            get {  return ((Coding & 0x01) > 0) ? "Stereo": "Mono"; }
+            get { return ((Coding & 0x01) > 0) ? "Stereo" : "Mono"; }
         }
         public String SampleRate
         {
@@ -147,7 +143,11 @@ namespace ISO9660
         {
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             _sector = (_SectorHeader)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(_SectorHeader));
-            handle.Free();            
+            handle.Free();
         }
+        //public void ReadBytes(byte[] data)
+        //{
+        //    _sector = MemoryMarshal.Read<_SectorHeader>(new ReadOnlySpan<byte>(data));
+        //}
     }
- } 
+}

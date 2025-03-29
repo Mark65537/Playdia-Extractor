@@ -51,7 +51,6 @@ namespace Playdia
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.pnlSectors = new System.Windows.Forms.Panel();
-            this.txtSectorStats = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tvSectors = new System.Windows.Forms.TreeView();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -71,6 +70,9 @@ namespace Playdia
             this.ColSectors = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColOffset = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColDetails = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.txtSectorStats = new System.Windows.Forms.DataGridView();
+            this.ColSubheader = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColCount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.menuStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.pnlSectors.SuspendLayout();
@@ -84,6 +86,7 @@ namespace Playdia
             this.tP_Player.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSectorStats)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -184,16 +187,6 @@ namespace Playdia
             this.pnlSectors.Name = "pnlSectors";
             this.pnlSectors.Size = new System.Drawing.Size(930, 194);
             this.pnlSectors.TabIndex = 0;
-            // 
-            // txtSectorStats
-            // 
-            this.txtSectorStats.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtSectorStats.Location = new System.Drawing.Point(0, 0);
-            this.txtSectorStats.Margin = new System.Windows.Forms.Padding(4);
-            this.txtSectorStats.Multiline = true;
-            this.txtSectorStats.Name = "txtSectorStats";
-            this.txtSectorStats.Size = new System.Drawing.Size(930, 194);
-            this.txtSectorStats.TabIndex = 0;
             // 
             // splitContainer1
             // 
@@ -369,6 +362,30 @@ namespace Playdia
             this.ColDetails.Name = "ColDetails";
             this.ColDetails.ReadOnly = true;
             // 
+            // txtSectorStats
+            // 
+            this.txtSectorStats.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.txtSectorStats.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColSubheader,
+            this.ColCount});
+            this.txtSectorStats.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSectorStats.Location = new System.Drawing.Point(0, 0);
+            this.txtSectorStats.Name = "txtSectorStats";
+            this.txtSectorStats.Size = new System.Drawing.Size(930, 194);
+            this.txtSectorStats.TabIndex = 0;
+            // 
+            // ColSubheader
+            // 
+            this.ColSubheader.HeaderText = "Subheader";
+            this.ColSubheader.Name = "ColSubheader";
+            this.ColSubheader.ReadOnly = true;
+            // 
+            // ColCount
+            // 
+            this.ColCount.HeaderText = "Count";
+            this.ColCount.Name = "ColCount";
+            this.ColCount.ReadOnly = true;
+            // 
             // frmReader
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -384,7 +401,6 @@ namespace Playdia
             this.menuStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.pnlSectors.ResumeLayout(false);
-            this.pnlSectors.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -395,6 +411,7 @@ namespace Playdia
             this.tP_Player.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.txtSectorStats)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -417,7 +434,6 @@ namespace Playdia
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.ToolStripMenuItem sectorStatsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
-        private System.Windows.Forms.TextBox txtSectorStats;
         private System.Windows.Forms.ToolStripMenuItem extractAudioToolStripMenuItem;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
         private System.Windows.Forms.ToolStripMenuItem extractVideoToolStripMenuItem;
@@ -433,5 +449,8 @@ namespace Playdia
         private System.Windows.Forms.DataGridViewTextBoxColumn ColSectors;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColOffset;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColDetails;
+        private System.Windows.Forms.DataGridView txtSectorStats;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColSubheader;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColCount;
     }
 }

@@ -9,6 +9,7 @@
 using ISO9660;
 using PlaydiaControls;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
@@ -87,7 +88,19 @@ namespace Playdia
                 TreeNode node = drNode.Nodes.Add(dr.FileIdentifier);
                 node.Tag = dr;
             }
-            this.txtSectorStats.Text = discimg.SectorStats();
+            UpdateSectorStats();
+        }
+
+        private void UpdateSectorStats()
+        {
+            txtSectorStats.Rows.Clear();
+            Dictionary<string, int> stats = discimg.GetSectorStats();
+
+            foreach (KeyValuePair<string, int> stat in stats)
+            {
+                txtSectorStats.Rows.Add(stat.Key, stat.Value);
+            }
+            txtSectorStats.Sort(ColSubheader, System.ComponentModel.ListSortDirection.Ascending);
         }
 
         private void tvSectors_AfterSelect(object sender, TreeViewEventArgs e)
@@ -124,7 +137,7 @@ namespace Playdia
 
         private void sectorStatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(discimg.SectorStats());
+            UpdateSectorStats();
         }
 
         private void extractAudioToolStripMenuItem_Click(object sender, EventArgs e)

@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
 namespace ISO9660
 {
-    [StructLayout(LayoutKind.Sequential, Size= 2352,Pack=1)]
+    /// <summary>
+    /// 
+    /// </summary>
+    [StructLayout(LayoutKind.Sequential, Size = 2352, Pack = 1)]
     struct _XASectorForm1
     {
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst=12)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 12)]
         public string syncPattern;
         [MarshalAs(UnmanagedType.U1)]
         public byte minute;
@@ -20,9 +19,9 @@ namespace ISO9660
         public byte block;
         [MarshalAs(UnmanagedType.U1)]
         public byte mode;
-        [MarshalAs(UnmanagedType.ByValArray,SizeConst=2)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         public UInt32[] subheader;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst=2048)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2048)]
         public byte[] data;
         [MarshalAs(UnmanagedType.U4)]
         public UInt32 EDC;
@@ -42,13 +41,13 @@ namespace ISO9660
 
         public string SyncPattern
         {
-            get { return _sector.syncPattern;}
-            set { _sector.syncPattern = value;} 
+            get { return _sector.syncPattern; }
+            set { _sector.syncPattern = value; }
         }
-        public byte Minute 
-        { 
-            get {  return (byte)((_sector.minute & 0xf) + (10 * (_sector.minute >> 4))); } 
-            set { _sector.minute = (byte)((value % 10) | ((value /10) << 4)); } 
+        public byte Minute
+        {
+            get { return (byte)((_sector.minute & 0xf) + (10 * (_sector.minute >> 4))); }
+            set { _sector.minute = (byte)((value % 10) | ((value / 10) << 4)); }
         }
         public byte Second
         {
@@ -63,7 +62,7 @@ namespace ISO9660
         public byte Mode
         {
             get { return _sector.mode; }
-            set { _sector.mode = value;}
+            set { _sector.mode = value; }
         }
         public UInt32 SubHeader1
         {
@@ -104,7 +103,7 @@ namespace ISO9660
         public byte[] ECCP
         {
             get { return _sector.ECCP; }
-            set { _sector.ECCP = value;}
+            set { _sector.ECCP = value; }
         }
         public byte[] ECCQ
         {
@@ -116,7 +115,7 @@ namespace ISO9660
         {
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             _sector = (_XASectorForm1)Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(_XASectorForm1));
-            handle.Free();            
+            handle.Free();
         }
     }
- } 
+}
